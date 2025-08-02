@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gill's Student Corner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background-color: #ffd54f;
+      padding: 1rem;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      background-color: #fff8e1;
+      padding: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      cursor: pointer;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    nav a:hover {
+      background-color: #ffe0b2;
+    }
+    section {
+      padding: 2rem;
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .yellow-heart {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    .hidden-message {
+      display: none;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .gallery img {
+      width: 100px;
+      margin-right: 1rem;
+      border-radius: 10px;
+    }
+    #login-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    #todo-list input {
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+    }
+    .todo-item {
+      margin: 0.5rem 0;
+    }
+    #quote-box {
+      background-color: #fffde7;
+      padding: 1rem;
+      border-left: 5px solid #fbc02d;
+      font-style: italic;
+      margin-top: 1rem;
+    }
+    /* Toggle content styles */
+    .toggle-content {
+      display: none;
+      margin-top: 1rem;
+    }
+    .toggle-content.active {
+      display: block;
+    }
+    /* Meme styling */
+    .memes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .memes img {
+      max-width: 150px;
+      border-radius: 8px;
+    }
+    /* Mini games styling */
+    .mini-games {
+      margin-top: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #ffd54f;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #ffb300;
+    }
+    /* Memory Game styles */
+    #memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .card {
+      width: 80px;
+      height: 80px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 8px;
+      user-select: none;
+    }
+    /* Spotify embed styling */
+    iframe {
+      width: 100%;
+      height: 380px;
+      border: none;
+    }
+  </style>
+</head>
+<body onload="checkLogin(); generateQuote(); initializeMemoryGame();">
+  <header>
+    <h1>📚 Gill's Student Corner</h1>
+    <p>A space for help, healing, and a bit of fun 🌟</p>
+  </header>
+
+  <div id="login-section" class="card">
+    <h2>🔐 Welcome</h2>
+    <p>Enter your name:</p>
+    <input type="text" id="username" placeholder="Your name" />
+    <button onclick="login()">Enter</button>
+    <p id="welcome-message"></p>
+  </div>
+
+  <nav>
+    <a onclick="showSection('study')">Study Help</a>
+    <a onclick="showSection('mental')">Mental Health</a>
+    <a onclick="showSection('tools')">Tools</a>
+    <a onclick="showSection('fun')">Entertainment</a>
+    <a onclick="showSection('interactive')">Interactive</a>
+    <a onclick="showSection('miniGames')">Mini Games</a>
+    <a onclick="showSection('music')">Relaxing Music</a>
+  </nav>
+
+  <!-- Study Help -->
+  <section id="study" class="active">
+    <div class="card">
+      <h2>📖 Study Help</h2>
+      <ul>
+        <li><strong>Lesson Summaries:</strong> Quick summaries of common subjects</li>
+        <li><strong>Reviewers:</strong> Downloadable PDFs for quizzes</li>
+        <li><strong>Homework Tips:</strong> How to answer common tasks</li>
+        <li><strong>Study Tips:</strong> Improve focus, memory, and time use</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Mental Health & Support -->
+  <section id="mental">
+    <div class="card">
+      <h2>🧘 Mental Health & Support</h2>
+      <p>Click the heart to feel seen 💛</p>
+      <div class="yellow-heart" onclick="toggleMessage()">💛</div>
+      <div id="message" class="hidden-message"></div>
+      <ul>
+        <li>✨ Motivational Quotes</li>
+        <li>💬 <button onclick="showConfession()">Confession Box (coming soon)</button></li>
+        <li>📖 Journaling Ideas</li>
+        <li>🎵 Lo-fi & Relax Playlists</li>
+        <li><button onclick="showPlaylist()">Mental Health Playlists</button></li>
+      </ul>
+      <div id="quote-box"></div>
+    </div>
+  </section>
+
+  <!-- Productivity Tools -->
+  <section id="tools">
+    <div class="card">
+      <h2>🛠️ Productivity Tools</h2>
+      <div id="todo-list">
+        <input type="text" id="new-task" placeholder="Add a new task" />
+        <button onclick="addTask()">Add</button>
+        <ul id="task-list"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Entertainment -->
+  <section id="fun">
+    <div class="card">
+      <h2>🎉 Entertainment</h2>
+      <ul>
+        <li>🎮 Mini Games (see below)</li>
+        <li>🤣 Funny Memes Gallery</li>
+        <li>🎨 Student Art & Poetry</li>
+        <li>🌟 Student of the Month</li>
+      </ul>
+      <div class="memes">
+        <img src="https://i.imgur.com/XP2KOK8.jpg" alt="Filipino Meme 1" />
+        <img src="https://i.imgur.com/4M7IWDe.jpg" alt="Filipino Meme 2" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Mini Games -->
+  <section id="miniGames">
+    <div class="card">
+      <h2>🎮 Mini Games</h2>
+      <!-- Math Quiz -->
+      <div>
+        <h3>Math Quiz</h3>
+        <p id="math-question"></p>
+        <input type="number" id="answer" placeholder="Your answer" />
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="math-feedback"></p>
+      </div>
+      <hr />
+      <!-- Memory Card Game -->
+      <div>
+        <h3>Memory Card Game</h3>
+        <div id="memory-game"></div>
+        <button onclick="resetMemoryGame()">Reset Game</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Relaxing Music / Spotify Playlist -->
+  <section id="music">
+    <div class="card">
+      <h2>🎵 Relaxing Music</h2>
+      <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4WgGUtkjjaN" allow="encrypted-media"></iframe>
+    </div>
+  </section>
+
+  <!-- Interactive Corner -->
+  <section id="interactive">
+    <div class="card">
+      <h2>📢 Interactive Corner</h2>
+      <ul>
+        <li>
+          📊 Weekly Poll: 
+          <button onclick="showPoll()">What’s the hardest subject this week?</button>
+        </li>
+        <li>💡 <button onclick="showSuggestion()">Suggestion Box</button></li>
+        <li>💬 Comments Section (planned)</li>
+        <li>🎓 Study Buddy Finder</li>
+      </ul>
+      <!-- Toggle Content -->
+      <div id="poll-section" class="toggle-content">
+        <h3>Poll: What’s the hardest subject this week?</h3>
+        <p>Math, Science, English, Filipino, etc.</p>
+      </div>
+      <div id="suggestion-section" class="toggle-content">
+        <h3>Suggestion Box</h3>
+        <textarea rows="4" cols="50" placeholder="Your suggestions..."></textarea>
+        <br /><br />
+        <button onclick="submitSuggestion()">Submit</button>
+      </div>
+      <div id="confession-section" class="toggle-content">
+        <h3>Confession Box (Coming Soon)</h3>
+        <p>Stay tuned!</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Show/hide sections
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+
+      // If interactive, show poll by default
+      if (sectionId === 'interactive') {
+        showPoll();
+      }
+    }
+
+    // Login functions
+    function login() {
+      const name = document.getElementById("username").value;
+      if (name) {
+        localStorage.setItem("studentName", name);
+        checkLogin();
+      }
+    }
+
+    function checkLogin() {
+      const name = localStorage.getItem("studentName");
+      if (name) {
+        document.getElementById("login-section").style.display = 'none';
+        const msg = `Hey ${name} 🌷 I know things have been really hectic for you, but please don’t forget how much you matter. You are not alone. Take it one breath at a time.`;
+        document.getElementById("welcome-message").innerText = msg;
+        document.getElementById("welcome-message").style.display = 'block';
+      }
+    }
+
+    function toggleMessage() {
+      const msgDiv = document.getElementById("message");
+      if (msgDiv.style.display === 'block') {
+        msgDiv.style.display = 'none';
+      } else {
+        const name = localStorage.getItem("studentName") || "Student";
+        msgDiv.innerText = `Hi ${name}! Remember, you're doing great. Keep going! 💖`;
+        msgDiv.style.display = 'block';
+      }
+    }
+
+    // Show toggle content
+    function showPoll() {
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById('poll-section').classList.add('active');
+    }
+    function showSuggestion() {
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById('suggestion-section').classList.add('active');
+    }
+
+    // Add task
+    function addTask() {
+      const taskInput = document.getElementById("new-task");
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        const li = document.createElement("li");
+        li.className = "todo-item";
+        li.textContent = taskText;
+        document.getElementById("task-list").appendChild(li);
+        taskInput.value = "";
+      }
+    }
+
+    // Generate motivational quote
+    function generateQuote() {
+      const quotes = [
+        "You're doing better than you think you are.",
+        "Progress is progress, no matter how small.",
+        "Rest is productive too.",
+        "You don’t have to do it all at once."
+      ];
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quote-box").innerText = `💬 ${quote}`;
+    }
+
+    // Mini Math Quiz
+    const mathQuestions = [
+      { question: "What is 8 x 7?", answer: 56 },
+      { question: "What is 15 + 6?", answer: 21 },
+      { question: "What is 12 - 5?", answer: 7 },
+      { question: "What is 9 x 3?", answer: 27 }
+    ];
+    let currentQuestionIndex = 0;
+
+    function loadMathQuestion() {
+      const q = mathQuestions[currentQuestionIndex];
+      document.getElementById("math-question").innerText = q.question;
+      document.getElementById("answer").value = "";
+      document.getElementById("math-feedback").innerText = "";
+    }
+
+    function checkAnswer() {
+      const userAns = parseInt(document.getElementById("answer").value);
+      const correctAns = mathQuestions[currentQuestionIndex].answer;
+      if (userAns === correctAns) {
+        document.getElementById("math-feedback").innerText = "Correct! 🎉";
+        currentQuestionIndex = (currentQuestionIndex + 1) % mathQuestions.length;
+        setTimeout(loadMathQuestion, 1000);
+      } else {
+        document.getElementById("math-feedback").innerText = "Try again!";
+      }
+    }
+
+    // Initialize first math question
+    function initializeMemoryGame() {
+      // Setup the memory game
+      const cards = ['🍎', '🍌', '🍇', '🍓', '🍎', '🍌', '🍇', '🍓'];
+      let shuffled = [];
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+      shuffled = shuffle([...cards]);
+      const gameDiv = document.getElementById('memory-game');
+      gameDiv.innerHTML = "";
+      shuffled.forEach((icon, index) => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+        cardDiv.dataset.index = index;
+        cardDiv.dataset.icon = icon;
+        cardDiv.innerText = '';
+        cardDiv.onclick = handleMemoryCardClick;
+        gameDiv.appendChild(cardDiv);
+      });
+    }
+
+    let firstCard = null;
+    let lockBoard = false;
+    function handleMemoryCardClick(e) {
+      if (lockBoard) return;
+      const card = e.currentTarget;
+      if (card.innerText !== '') return; // Already matched
+      card.innerText = card.dataset.icon;
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+      if (firstCard.dataset.icon === card.dataset.icon) {
+        // Match
+        firstCard = null;
+      } else {
+        // Not match
+        lockBoard = true;
+        setTimeout(() => {
+          firstCard.innerText = '';
+          card.innerText = '';
+          firstCard = null;
+          lockBoard = false;
+        }, 1000);
+      }
+    }
+
+    function resetMemoryGame() {
+      initializeMemoryGame();
+    }
+
+    // Show/hide sections
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+
+      if (sectionId === 'interactive') {
+        showPoll();
+      }
+    }
+
+    // Login functions
+    function login() {
+      const name = document.getElementById("username").value;
+      if (name) {
+        localStorage.setItem("studentName", name);
+        checkLogin();
+      }
+    }
+
+    function checkLogin() {
+      const name = localStorage.getItem("studentName");
+      if (name) {
+        document.getElementById("login-section").style.display = 'none';
+        const msg = `Hey ${name} 🌷 I know things have been really hectic for you, but please don’t forget how much you matter. You are not alone. Take it one breath at a time.`;
+        document.getElementById("welcome-message").innerText = msg;
+        document.getElementById("welcome-message").style.display = 'block';
+      }
+    }
+
+    function toggleMessage() {
+      const msgDiv = document.getElementById("message");
+      if (msgDiv.style.display === 'block') {
+        msgDiv.style.display = 'none';
+      } else {
+        const name = localStorage.getItem("studentName") || "Student";
+        msgDiv.innerText = `Hi ${name}! Remember, you're doing great. Keep going! 💖`;
+        msgDiv.style.display = 'block';
+      }
+    }
+
+    // Show toggle content
+    function showPoll() {
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById('poll-section').classList.add('active');
+    }
+    function showSuggestion() {
+      document.querySelectorAll('.toggle-content').forEach(div => div.classList.remove('active'));
+      document.getElementById('suggestion-section').classList.add('active');
+    }
+
+    // Submit suggestion
+    function submitSuggestion() {
+      alert("Thank you for your suggestion!");
+    }
+
+    // Initialize
+    window.onload = () => {
+      checkLogin();
+      generateQuote();
+      loadMathQuestion();
+      initializeMemoryGame();
+    };
+  </script>
+</body>
+</html>
